@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adamyaa D N — Backend Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0e13;
+    --bg-panel: #10141b;
+    --bg-panel-2: #141924;
+    --line: #232b38;
+    --text: #e7eaef;
+    --text-dim: #8892a0;
+    --text-faint: #4d5666;
+    --accent: #34e0a1;
+    --accent-dim: #1c7a58;
+    --amber: #ffb454;
+    --amber-dim: #7a5a26;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent-dim); color:#fff; }
+  a{ color:inherit; }
+
+  /* ---------- background grid texture ---------- */
+  .grid-bg{
+    position:fixed; inset:0; z-index:-1;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity:0.35;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 24px; }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0; border-bottom:1px solid var(--line);
+    font-family:var(--mono); font-size:13px; color:var(--text-dim);
+  }
+  .topbar .dot{ color:var(--accent); }
+  .topbar nav{ display:flex; gap:22px; }
+  .topbar nav a{ text-decoration:none; color:var(--text-dim); transition:color .15s; }
+  .topbar nav a:hover{ color:var(--accent); }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:64px 0 40px; }
+  .status-line{
+    font-family:var(--mono); font-size:13px; color:var(--accent);
+    display:flex; align-items:center; gap:8px; margin-bottom:22px;
+    opacity:0; animation: fadein .5s ease forwards .1s;
+  }
+  .status-line .pulse{
+    width:8px; height:8px; border-radius:50%; background:var(--accent);
+    box-shadow:0 0 0 0 rgba(52,224,161,0.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(52,224,161,0.5); }
+    70%{ box-shadow:0 0 0 8px rgba(52,224,161,0); }
+    100%{ box-shadow:0 0 0 0 rgba(52,224,161,0); }
+  }
+  h1.name{
+    font-family:var(--mono); font-weight:800; letter-spacing:-0.02em;
+    font-size:clamp(38px, 7vw, 64px); line-height:1.05;
+    opacity:0; animation: fadein .6s ease forwards .2s;
+  }
+  h1.name span{ color:var(--text-faint); }
+  .role{
+    font-size:19px; color:var(--text-dim); margin-top:10px; max-width:640px;
+    opacity:0; animation: fadein .6s ease forwards .35s;
+  }
+  .role strong{ color:var(--text); font-weight:600; }
+
+  @keyframes fadein{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .contact-row{
+    margin-top:26px; display:flex; flex-wrap:wrap; gap:10px;
+    font-family:var(--mono); font-size:12.5px;
+    opacity:0; animation: fadein .6s ease forwards .5s;
+  }
+  .contact-row a{
+    border:1px solid var(--line); padding:7px 12px; border-radius:6px;
+    text-decoration:none; color:var(--text-dim);
+    transition: border-color .15s, color .15s;
+  }
+  .contact-row a:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* ---------- metrics strip ---------- */
+  .metrics{
+    margin-top:48px;
+    display:grid; grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    background:var(--bg-panel);
+  }
+  .metric{
+    padding:20px 18px; border-right:1px solid var(--line);
+  }
+  .metric:last-child{ border-right:none; }
+  .metric .num{
+    font-family:var(--mono); font-weight:700; font-size:28px; color:var(--accent);
+  }
+  .metric .label{
+    font-size:12px; color:var(--text-dim); margin-top:6px; line-height:1.4;
+  }
+  @media (max-width:700px){
+    .metrics{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2){ border-right:none; }
+  }
+
+  /* ---------- section shell ---------- */
+  section{ padding:56px 0; border-top:1px solid var(--line); }
+  .section-head{
+    display:flex; align-items:baseline; gap:12px; margin-bottom:28px;
+  }
+  .section-head .idx{
+    font-family:var(--mono); color:var(--text-faint); font-size:13px;
+  }
+  .section-head h2{
+    font-family:var(--mono); font-size:14px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--text);
+  }
+  .section-head .rule{ flex:1; height:1px; background:var(--line); }
+
+  /* ---------- about ---------- */
+  .about p{ color:var(--text-dim); max-width:680px; font-size:15.5px; }
+  .about p + p{ margin-top:14px; }
+
+  /* ---------- deployment log (experience) ---------- */
+  .log{ position:relative; }
+  .log::before{
+    content:''; position:absolute; left:7px; top:6px; bottom:6px; width:1px;
+    background:var(--line);
+  }
+  .log-entry{ position:relative; padding-left:32px; margin-bottom:38px; }
+  .log-entry:last-child{ margin-bottom:0; }
+  .log-entry::before{
+    content:''; position:absolute; left:0; top:6px; width:15px; height:15px;
+    border-radius:50%; background:var(--bg-panel); border:2px solid var(--accent);
+  }
+  .log-entry.past::before{ border-color:var(--text-faint); }
+  .log-meta{
+    font-family:var(--mono); font-size:12px; color:var(--text-faint);
+    display:flex; gap:10px; flex-wrap:wrap; margin-bottom:4px;
+  }
+  .log-meta .tag{
+    color:var(--accent); border:1px solid var(--accent-dim); padding:1px 7px;
+    border-radius:4px; font-size:11px;
+  }
+  .log-entry.past .log-meta .tag{ color:var(--amber); border-color:var(--amber-dim); }
+  .log-title{ font-size:17px; font-weight:600; color:var(--text); }
+  .log-org{ font-size:13.5px; color:var(--text-dim); margin-bottom:12px; }
+  .log-items{ list-style:none; }
+  .log-items li{
+    position:relative; padding-left:18px; margin-bottom:9px;
+    color:var(--text-dim); font-size:14.5px;
+  }
+  .log-items li::before{
+    content:'›'; position:absolute; left:0; color:var(--accent); font-family:var(--mono);
+  }
+  .log-items li b{ color:var(--text); font-weight:600; }
+
+  /* ---------- stack / skills ---------- */
+  .stack-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:760px){ .stack-grid{ grid-template-columns:1fr; } }
+  .stack-cat{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:10px; padding:20px;
+  }
+  .stack-cat h3{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:14px;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-family:var(--mono); font-size:12px; color:var(--text-dim);
+    border:1px solid var(--line); background:var(--bg-panel-2);
+    padding:5px 10px; border-radius:5px;
+  }
+
+  /* ---------- education + contributions ---------- */
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+  @media (max-width:760px){ .two-col{ grid-template-columns:1fr; } }
+  .edu-card{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:10px; padding:22px;
+  }
+  .edu-card .school{ font-weight:600; font-size:16px; }
+  .edu-card .degree{ color:var(--text-dim); font-size:14px; margin-top:4px; }
+  .edu-card .meta{ font-family:var(--mono); font-size:12px; color:var(--text-faint); margin-top:10px; }
+
+  .contrib-list{ list-style:none; }
+  .contrib-list li{
+    position:relative; padding-left:20px; margin-bottom:12px; font-size:14.5px; color:var(--text-dim);
+  }
+  .contrib-list li::before{
+    content:'#'; position:absolute; left:0; color:var(--text-faint); font-family:var(--mono);
+  }
+  .contrib-list li b{ color:var(--accent); font-family:var(--mono); font-weight:700; }
+
+  /* ---------- footer ---------- */
+  footer{ padding:48px 0 64px; border-top:1px solid var(--line); }
+  .terminal{
+    font-family:var(--mono); font-size:14px; color:var(--text-dim);
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:10px;
+    padding:20px 22px;
+  }
+  .terminal .l1{ color:var(--text-faint); }
+  .terminal .prompt{ color:var(--accent); }
+  .terminal a{ color:var(--text); text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+  .terminal a:hover{ text-decoration-color:var(--accent); color:var(--accent); }
+  .foot-note{ margin-top:18px; font-size:12.5px; color:var(--text-faint); font-family:var(--mono); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+  }
+
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div><span class="dot">●</span> adamyaa-dn / prod</div>
+    <nav>
+      <a href="#experience">experience</a>
+      <a href="#stack">stack</a>
+      <a href="#education">education</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <div class="status-line" id="statusLine"><span class="pulse"></span> status: operational · uptime <span id="uptimeText">4y 0m</span></div>
+    <h1 class="name">Adamyaa D N <span>/ backend</span></h1>
+    <p class="role"><strong>Backend Software Engineer</strong> in Bangalore, building and owning Java microservices in large-scale, regulated environments — spec-driven development, agentic AI workflows, API design, and production reliability.</p>
+
+    <div class="contact-row">
+      <a href="tel:9535173648">📞 9535173648</a>
+      <a href="mailto:adamyaadn14@gmail.com">✉ adamyaadn14@gmail.com</a>
+      <a href="https://linkedin.com/in/adamyaa-d-n-6064b117a" target="_blank" rel="noopener">in/adamyaa-d-n</a>
+      <a href="https://github.com/adamyaadn" target="_blank" rel="noopener">github/adamyaadn</a>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="num">4</div><div class="label">production microservices owned end-to-end</div></div>
+      <div class="metric"><div class="num">10K</div><div class="label">requests/hour on a core API redesigned with virtual threads</div></div>
+      <div class="metric"><div class="num">70%</div><div class="label">manual effort cut via agentic test automation</div></div>
+      <div class="metric"><div class="num">250+</div><div class="label">critical production bugs resolved with hotfixes</div></div>
+    </div>
+  </div>
+
+  <section id="experience">
+    <div class="section-head"><span class="idx">01</span><h2>Deployment log</h2><div class="rule"></div></div>
+    <div class="log">
+      <div class="log-entry">
+        <div class="log-meta"><span class="tag">current</span><span>Sep 2024 — Now</span></div>
+        <div class="log-title">Application Software Engineer 2</div>
+        <div class="log-org">Oracle, Bangalore</div>
+        <ul class="log-items">
+          <li>Redesigned a critical API's execution model using <b>virtual threads</b> to parallelize calls across its <b>3 downstream consumer services</b>, collapsing latency from the sum of sequential calls to the max of the slowest thread — cutting response time by 40% on an API serving <b>~10K requests/hour</b>.</li>
+          <li>Refactored <b>6,000–8,000 lines of code</b>, reducing algorithmic complexity from <b>O(n³) to O(n² log n)</b> on a core code path, directly lowering CPU cost and response time under load.</li>
+          <li>Authored skills to enable JWT token based feature testing using <b>GPT 5.5</b> for any code change performed including the analysis of code and API correctness and latency verifications, reducing human effort per story by 4–6 hours especially avoiding regression bugs after huge refactors.</li>
+          <li>Led the <b>spec-driven development</b> of 3 epics across multiple microservices, reducing human effort by <b>40% per epic</b>.</li>
+          <li>Built agentic AI workflows that generate automation test cases straight from Swagger docs and requirement catalogs — plus the runnable test files themselves — cutting automation effort by <b>70%</b>.</li>
+          <li>Optimized 4 critical inter-service APIs through database schema redesign, query tuning, and refactoring, improving experience across 5+ scenarios by <b>40%</b>.</li>
+          <li>Owned the low-level design of a large epic: <b>7 new/upversioned APIs</b> and <b>3 new UI pages</b>.</li>
+          <li>Held full ownership of <b>4 production microservices</b>, each with <b>3 downstream consumers</b> — architecture, features, S2S integrations, incidents, automation, and performance monitoring.</li>
+          <li>Built cross-microservice analytical reporting, generating full audit summaries of entire clinical studies in <b>under 5 minutes</b>.</li>
+          <li>Shipped user-customizable notification content, headers, and footers, editable at runtime.</li>
+          <li>Onboarded and mentored <b>3 new engineers</b> into the product and domain, personally leading <b>induction sessions for 2 of them</b> — shortening their ramp-up to independent contribution.</li>
+        </ul>
+      </div>
+
+      <div class="log-entry past">
+        <div class="log-meta"><span class="tag">v1</span><span>Aug 2022 — Aug 2024</span></div>
+        <div class="log-title">Associate Software Developer</div>
+        <div class="log-org">Oracle, Bangalore</div>
+        <ul class="log-items">
+          <li>Redesigned the database schema of a core microservice while keeping <b>10+ existing APIs</b> backward compatible alongside new endpoints.</li>
+          <li>Raised unit and integration test coverage from <b>50% to 85%</b>, reducing regressions and improving release stability.</li>
+          <li>Delivered <b>25+</b> production-grade features with strong test coverage and minimal post-release defects.</li>
+          <li>Rolled out parallel workflows across <b>10 APIs</b>, adding new functionality while holding SLA and latency targets through query optimization.</li>
+        </ul>
+      </div>
+
+      <div class="log-entry past">
+        <div class="log-meta"><span class="tag">v0</span><span>Jan 2022 — Jul 2022</span></div>
+        <div class="log-title">Software Intern</div>
+        <div class="log-org">Oracle, Bangalore</div>
+        <ul class="log-items">
+          <li>Implemented cloud monitoring with <b>Prometheus and Grafana</b>, eliminating recurring customer issues in Trial Management and Monitoring services.</li>
+          <li>Automated a manual 4-hour environment setup process down to <b>15 minutes</b> — a 90% cut.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-head"><span class="idx">02</span><h2>Stack manifest</h2><div class="rule"></div></div>
+    <div class="stack-grid">
+      <div class="stack-cat">
+        <h3>Programming &amp; Development</h3>
+        <div class="chip-row">
+          <span class="chip">Spec-driven w/ GPT 5.5</span><span class="chip">Java 8–21</span>
+          <span class="chip">Oracle JDBC</span><span class="chip">JavaScript</span>
+          <span class="chip">SQL</span><span class="chip">TypeScript</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <h3>Tools &amp; Technologies</h3>
+        <div class="chip-row">
+          <span class="chip">Git</span><span class="chip">GitLab</span><span class="chip">Jenkins</span>
+          <span class="chip">Maven</span><span class="chip">Postman</span><span class="chip">Docker</span>
+          <span class="chip">Oracle SQL</span><span class="chip">Grafana</span><span class="chip">Kubernetes</span>
+          <span class="chip">Liquibase</span><span class="chip">Restfuzz</span><span class="chip">Swagger/OpenAPI</span>
+          <span class="chip">Codex</span><span class="chip">Jira/Confluence MCP</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <h3>Frameworks &amp; Methods</h3>
+        <div class="chip-row">
+          <span class="chip">REST API Design</span><span class="chip">JAX-RS</span>
+          <span class="chip">Spring / Spring Boot</span><span class="chip">JUnit</span>
+          <span class="chip">Agile</span><span class="chip">Microservices</span>
+          <span class="chip">Tomcat</span><span class="chip">SonarQube</span>
+          <span class="chip">JEST</span><span class="chip">MVVM</span><span class="chip">MVC</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="section-head"><span class="idx">03</span><h2>Education</h2><div class="rule"></div></div>
+    <div class="edu-card" style="max-width:460px;">
+      <div class="school">RV College of Engineering</div>
+      <div class="degree">BE, Information Science Engineering — CGPA 8.58</div>
+      <div class="meta">Bangalore, Karnataka, India · 06 2018 – 06 2022</div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="section-head" style="margin-bottom:20px;"><span class="idx">04</span><h2>Contact</h2><div class="rule"></div></div>
+    <div class="terminal">
+      <div class="l1">$ whoami --contact</div>
+      <div><span class="prompt">></span> phone: <a href="tel:9535173648">9535173648</a></div>
+      <div><span class="prompt">></span> email: <a href="mailto:adamyaadn14@gmail.com">adamyaadn14@gmail.com</a></div>
+      <div><span class="prompt">></span> email (alt): <a href="mailto:adamyaadali@gmail.com">adamyaadali@gmail.com</a></div>
+      <div><span class="prompt">></span> linkedin: <a href="https://linkedin.com/in/adamyaa-d-n-6064b117a" target="_blank" rel="noopener">linkedin.com/in/adamyaa-d-n-6064b117a</a></div>
+      <div><span class="prompt">></span> github: <a href="https://github.com/adamyaadn" target="_blank" rel="noopener">github.com/adamyaadn</a></div>
+    </div>
+    <div class="foot-note">// built with &lt;3 · last deployed 2026</div>
+  </footer>
+</div>
+
+<script>
+  (function(){
+    var start = new Date(2022, 7, 1); // Aug 2022
+    var now = new Date();
+    var months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    if (now.getDate() < start.getDate()) months -= 1;
+    if (months < 0) months = 0;
+    var years = Math.floor(months / 12);
+    var remMonths = months % 12;
+    var el = document.getElementById('uptimeText');
+    if (el) el.textContent = years + 'y ' + remMonths + 'm';
+  })();
+</script>
+
+</body>
+</html>
