@@ -176,7 +176,7 @@
   .log-items li b{ color:var(--text); font-weight:600; }
 
   /* ---------- stack / skills ---------- */
-  .stack-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .stack-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
   @media (max-width:760px){ .stack-grid{ grid-template-columns:1fr; } }
   .stack-cat{
     background:var(--bg-panel); border:1px solid var(--line); border-radius:10px; padding:20px;
@@ -191,6 +191,29 @@
     border:1px solid var(--line); background:var(--bg-panel-2);
     padding:5px 10px; border-radius:5px;
   }
+
+  /* ---------- projects ---------- */
+  .project-card{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:10px; padding:24px;
+  }
+  .proj-top{
+    display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    margin-bottom:6px;
+  }
+  .proj-title{ font-size:17px; font-weight:600; color:var(--text); }
+  .proj-tag{
+    font-family:var(--mono); font-size:11px; color:var(--accent);
+    border:1px solid var(--accent-dim); padding:2px 8px; border-radius:4px;
+  }
+  .proj-desc{ color:var(--text-dim); font-size:14.5px; max-width:660px; margin:10px 0 16px; }
+  .proj-desc b{ color:var(--text); font-weight:600; }
+  .proj-links{ margin-top:16px; display:flex; flex-wrap:wrap; gap:10px; font-family:var(--mono); font-size:12px; }
+  .proj-links a{
+    border:1px solid var(--line); padding:6px 10px; border-radius:6px;
+    text-decoration:none; color:var(--text-dim); transition:border-color .15s, color .15s;
+  }
+  .proj-links a:hover{ border-color:var(--accent); color:var(--accent); }
+  .proj-links .placeholder{ color:var(--text-faint); }
 
   /* ---------- education + contributions ---------- */
   .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
@@ -239,6 +262,7 @@
     <div><span class="dot">●</span> adamyaa-dn / prod</div>
     <nav>
       <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
       <a href="#stack">stack</a>
       <a href="#education">education</a>
       <a href="#contact">contact</a>
@@ -311,8 +335,38 @@
     </div>
   </section>
 
+  <section id="projects">
+    <div class="section-head"><span class="idx">02</span><h2>Projects</h2><div class="rule"></div></div>
+
+    <div class="project-card">
+      <div class="proj-top">
+        <div class="proj-title">Sounder — a self-directed Morse code tutor</div>
+        <span class="proj-tag">side project</span>
+      </div>
+      <p class="proj-desc">
+        A conversational AI tutor for Morse code — learners drive their own lessons through chat instead of a
+        fixed curriculum, with a live workbench to convert, flash, and play back Morse by sight or by ear.
+      </p>
+      <ul class="log-items">
+        <li>Defined the product concept and chose a fully serverless, zero-cost architecture (GitHub Pages + Cloudflare Worker + Groq API) over a paid backend.</li>
+        <li>Designed the tutor's prompt and state model — per-character progress tracked and fed back into the LLM each turn, with structured JSON responses driving the UI.</li>
+        <li>Designed and specified the three-part practice workbench (scratchpad, silent visual bulb, audio-only speaker) as a deliberate multi-sensory learning approach.</li>
+        <li>Deployed and debugged the full stack independently — Wrangler CLI, GitHub Pages, and root-causing live issues via DevTools Console/Network output.</li>
+      </ul>
+      <div class="chip-row" style="margin-top:16px;">
+        <span class="chip">Vanilla JS</span><span class="chip">Web Audio API</span>
+        <span class="chip">Cloudflare Workers</span><span class="chip">GitHub Pages</span>
+        <span class="chip">Groq API</span><span class="chip">Prompt design</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://adamyaadn.github.io/Morse-Code-Tutor/" target="_blank" rel="noopener">↗ live demo</a>
+        <a href="https://github.com/adamyaadn/Morse-Code-Tutor" target="_blank" rel="noopener">↗ source</a>
+      </div>
+    </div>
+  </section>
+
   <section id="stack">
-    <div class="section-head"><span class="idx">02</span><h2>Stack manifest</h2><div class="rule"></div></div>
+    <div class="section-head"><span class="idx">03</span><h2>Stack manifest</h2><div class="rule"></div></div>
     <div class="stack-grid">
       <div class="stack-cat">
         <h3>Programming &amp; Development</h3>
@@ -330,6 +384,16 @@
           <span class="chip">Oracle SQL</span><span class="chip">Grafana</span><span class="chip">Kubernetes</span>
           <span class="chip">Liquibase</span><span class="chip">Restfuzz</span><span class="chip">Swagger/OpenAPI</span>
           <span class="chip">Codex</span><span class="chip">Jira/Confluence MCP</span>
+          <span class="chip">Cloudflare Workers</span><span class="chip">GitHub Pages</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <h3>AI &amp; LLM Engineering</h3>
+        <div class="chip-row">
+          <span class="chip">Prompt Engineering</span><span class="chip">LLM API Integration</span>
+          <span class="chip">Structured JSON Outputs</span><span class="chip">Groq / OpenAI-compatible APIs</span>
+          <span class="chip">Conversational State Design</span><span class="chip">Agentic Test Automation</span>
+          <span class="chip">Spec-Driven Dev w/ GPT 5.5</span>
         </div>
       </div>
       <div class="stack-cat">
@@ -346,7 +410,7 @@
   </section>
 
   <section id="education">
-    <div class="section-head"><span class="idx">03</span><h2>Education</h2><div class="rule"></div></div>
+    <div class="section-head"><span class="idx">04</span><h2>Education</h2><div class="rule"></div></div>
     <div class="edu-card" style="max-width:460px;">
       <div class="school">RV College of Engineering</div>
       <div class="degree">BE, Information Science Engineering — CGPA 8.58</div>
@@ -355,7 +419,7 @@
   </section>
 
   <footer id="contact">
-    <div class="section-head" style="margin-bottom:20px;"><span class="idx">04</span><h2>Contact</h2><div class="rule"></div></div>
+    <div class="section-head" style="margin-bottom:20px;"><span class="idx">05</span><h2>Contact</h2><div class="rule"></div></div>
     <div class="terminal">
       <div class="l1">$ whoami --contact</div>
       <div><span class="prompt">></span> phone: <a href="tel:9535173648">9535173648</a></div>
